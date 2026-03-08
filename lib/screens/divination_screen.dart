@@ -4,6 +4,7 @@ import '../core/divination.dart';
 import '../core/calendar.dart';
 import '../core/analysis.dart';
 import '../widgets/tao_decorations.dart';
+import '../utils/responsive.dart';
 import 'result_screen.dart';
 
 class DivinationScreen extends StatefulWidget {
@@ -31,6 +32,8 @@ class _DivinationScreenState extends State<DivinationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Responsive.isMobile(context);
+    
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
       appBar: AppBar(
@@ -38,24 +41,30 @@ class _DivinationScreenState extends State<DivinationScreen> {
       ),
       body: MysticBackground(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildHeaderSection(),
-              const SizedBox(height: 24),
-              _buildQuestionSection(),
-              const SizedBox(height: 24),
-              _buildQuestionTypeSection(),
-              const SizedBox(height: 24),
-              _buildMethodSection(),
-              const SizedBox(height: 24),
-              if (_selectedMethod == DivinationMethod.meihuaNumber)
-                _buildNumberInputSection(),
-              const SizedBox(height: 40),
-              _buildStartButton(),
-              const SizedBox(height: 20),
-            ],
+          padding: Responsive.horizontalPadding(context).copyWith(
+            top: isMobile ? 16 : 20,
+            bottom: isMobile ? 16 : 20,
+          ),
+          child: ConstrainedContainer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildHeaderSection(),
+                SizedBox(height: isMobile ? 16 : 24),
+                _buildQuestionSection(),
+                SizedBox(height: isMobile ? 16 : 24),
+                _buildQuestionTypeSection(),
+                SizedBox(height: isMobile ? 16 : 24),
+                _buildMethodSection(),
+                SizedBox(height: isMobile ? 16 : 24),
+                if (_selectedMethod == DivinationMethod.meihuaNumber)
+                  _buildNumberInputSection(),
+                if (_selectedMethod == DivinationMethod.meihuaNumber)
+                  SizedBox(height: isMobile ? 24 : 40),
+                _buildStartButton(),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
@@ -63,8 +72,10 @@ class _DivinationScreenState extends State<DivinationScreen> {
   }
 
   Widget _buildHeaderSection() {
+    final isMobile = Responsive.isMobile(context);
+    
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(isMobile ? 16 : 20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -74,7 +85,7 @@ class _DivinationScreenState extends State<DivinationScreen> {
             const Color(0xFFC9372C).withValues(alpha: 0.05),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
         border: Border.all(
           color: const Color(0x33D4AF37),
           width: 1,
@@ -83,7 +94,7 @@ class _DivinationScreenState extends State<DivinationScreen> {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(isMobile ? 10 : 12),
             decoration: BoxDecoration(
               color: const Color(0xFFD4AF37).withValues(alpha: 0.1),
               shape: BoxShape.circle,
@@ -91,32 +102,32 @@ class _DivinationScreenState extends State<DivinationScreen> {
                 color: const Color(0x33D4AF37),
               ),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.auto_fix_high,
-              color: Color(0xFFD4AF37),
-              size: 28,
+              color: const Color(0xFFD4AF37),
+              size: isMobile ? 24 : 28,
             ),
           ),
-          const SizedBox(width: 16),
-          const Expanded(
+          SizedBox(width: isMobile ? 12 : 16),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '诚心正意',
                   style: TextStyle(
-                    color: Color(0xFFD4AF37),
-                    fontSize: 18,
+                    color: const Color(0xFFD4AF37),
+                    fontSize: isMobile ? 16 : 18,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 2,
                   ),
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: isMobile ? 2 : 4),
                 Text(
                   '心诚则灵，静心思虑你所问之事',
                   style: TextStyle(
-                    color: Color(0xFF888888),
-                    fontSize: 12,
+                    color: const Color(0xFF888888),
+                    fontSize: isMobile ? 11 : 12,
                   ),
                 ),
               ],
@@ -128,6 +139,8 @@ class _DivinationScreenState extends State<DivinationScreen> {
   }
 
   Widget _buildQuestionSection() {
+    final isMobile = Responsive.isMobile(context);
+    
     return CloudBorder(
       color: const Color(0xFFD4AF37),
       child: Column(
@@ -135,56 +148,57 @@ class _DivinationScreenState extends State<DivinationScreen> {
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.edit_note,
-                color: Color(0xFFD4AF37),
-                size: 20,
+                color: const Color(0xFFD4AF37),
+                size: isMobile ? 18 : 20,
               ),
-              const SizedBox(width: 8),
-              const Text(
+              SizedBox(width: isMobile ? 6 : 8),
+              Text(
                 '您的问题',
                 style: TextStyle(
-                  color: Color(0xFFD4AF37),
-                  fontSize: 16,
+                  color: const Color(0xFFD4AF37),
+                  fontSize: isMobile ? 14 : 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 2,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: isMobile ? 10 : 12),
           TextField(
             controller: _questionController,
-            style: const TextStyle(
-              color: Color(0xFFFFF8DC),
-              fontSize: 15,
+            style: TextStyle(
+              color: const Color(0xFFFFF8DC),
+              fontSize: isMobile ? 14 : 15,
             ),
             decoration: InputDecoration(
               hintText: '静心思考，将你所问之事写在心中...',
               hintStyle: TextStyle(
                 color: const Color(0xFF666666),
                 fontStyle: FontStyle.italic,
+                fontSize: isMobile ? 13 : 14,
               ),
               filled: true,
               fillColor: const Color(0xFF1a1a1a),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                 borderSide: const BorderSide(color: Color(0x33D4AF37)),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                 borderSide: const BorderSide(color: Color(0x33D4AF37)),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
                 borderSide: const BorderSide(
                   color: Color(0xFFD4AF37),
                   width: 2,
                 ),
               ),
-              contentPadding: const EdgeInsets.all(16),
+              contentPadding: EdgeInsets.all(isMobile ? 12 : 16),
             ),
-            maxLines: 3,
+            maxLines: isMobile ? 2 : 3,
           ),
         ],
       ),
@@ -192,6 +206,8 @@ class _DivinationScreenState extends State<DivinationScreen> {
   }
 
   Widget _buildQuestionTypeSection() {
+    final isMobile = Responsive.isMobile(context);
+    
     return CloudBorder(
       color: const Color(0x33D4AF37),
       child: Column(
@@ -199,27 +215,27 @@ class _DivinationScreenState extends State<DivinationScreen> {
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.category,
-                color: Color(0xFFD4AF37),
-                size: 20,
+                color: const Color(0xFFD4AF37),
+                size: isMobile ? 18 : 20,
               ),
-              const SizedBox(width: 8),
-              const Text(
+              SizedBox(width: isMobile ? 6 : 8),
+              Text(
                 '问事类型',
                 style: TextStyle(
-                  color: Color(0xFFD4AF37),
-                  fontSize: 16,
+                  color: const Color(0xFFD4AF37),
+                  fontSize: isMobile ? 14 : 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 2,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: isMobile ? 12 : 16),
           Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: isMobile ? 8 : 10,
+            runSpacing: isMobile ? 8 : 10,
             children: QuestionType.values.map((type) {
               final isSelected = _selectedType == type;
               return GestureDetector(
@@ -228,9 +244,9 @@ class _DivinationScreenState extends State<DivinationScreen> {
                 },
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 12 : 16,
+                    vertical: isMobile ? 6 : 8,
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
@@ -258,7 +274,7 @@ class _DivinationScreenState extends State<DivinationScreen> {
                       color: isSelected
                           ? const Color(0xFFFFF8DC)
                           : const Color(0xFFAAAAAA),
-                      fontSize: 13,
+                      fontSize: isMobile ? 12 : 13,
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
@@ -272,37 +288,39 @@ class _DivinationScreenState extends State<DivinationScreen> {
   }
 
   Widget _buildMethodSection() {
+    final isMobile = Responsive.isMobile(context);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            const Icon(
+            Icon(
               Icons.settings,
-              color: Color(0xFFD4AF37),
-              size: 20,
+              color: const Color(0xFFD4AF37),
+              size: isMobile ? 18 : 20,
             ),
-            const SizedBox(width: 8),
-            const Text(
+            SizedBox(width: isMobile ? 6 : 8),
+            Text(
               '起卦方式',
               style: TextStyle(
-                color: Color(0xFFD4AF37),
-                fontSize: 16,
+                color: const Color(0xFFD4AF37),
+                fontSize: isMobile ? 14 : 16,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 2,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: isMobile ? 12 : 16),
         ...DivinationMethod.values.map((method) {
           final isSelected = _selectedMethod == method;
           return GestureDetector(
             onTap: () => setState(() => _selectedMethod = method),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(16),
+              margin: EdgeInsets.only(bottom: isMobile ? 10 : 12),
+              padding: EdgeInsets.all(isMobile ? 12 : 16),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -317,7 +335,7 @@ class _DivinationScreenState extends State<DivinationScreen> {
                           const Color(0xFF0D0D0D),
                         ],
                 ),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(isMobile ? 10 : 12),
                 border: Border.all(
                   color: isSelected
                       ? const Color(0xFFC9372C)
@@ -337,8 +355,8 @@ class _DivinationScreenState extends State<DivinationScreen> {
               child: Row(
                 children: [
                   Container(
-                    width: 24,
-                    height: 24,
+                    width: isMobile ? 20 : 24,
+                    height: isMobile ? 20 : 24,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: isSelected
@@ -351,14 +369,14 @@ class _DivinationScreenState extends State<DivinationScreen> {
                       ),
                     ),
                     child: isSelected
-                        ? const Icon(
+                        ? Icon(
                             Icons.check,
-                            size: 16,
-                            color: Color(0xFFFFF8DC),
+                            size: isMobile ? 14 : 16,
+                            color: const Color(0xFFFFF8DC),
                           )
                         : null,
                   ),
-                  const SizedBox(width: 16),
+                  SizedBox(width: isMobile ? 12 : 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,25 +388,25 @@ class _DivinationScreenState extends State<DivinationScreen> {
                             fontWeight: isSelected
                                 ? FontWeight.w600
                                 : FontWeight.w500,
-                            fontSize: 15,
+                            fontSize: isMobile ? 14 : 15,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: isMobile ? 2 : 4),
                         Text(
                           method.description,
-                          style: const TextStyle(
-                            color: Color(0xFF888888),
-                            fontSize: 12,
+                          style: TextStyle(
+                            color: const Color(0xFF888888),
+                            fontSize: isMobile ? 11 : 12,
                           ),
                         ),
                       ],
                     ),
                   ),
                   if (isSelected)
-                    const Icon(
+                    Icon(
                       Icons.auto_fix_high,
-                      color: Color(0xFFD4AF37),
-                      size: 20,
+                      color: const Color(0xFFD4AF37),
+                      size: isMobile ? 18 : 20,
                     ),
                 ],
               ),
@@ -400,6 +418,8 @@ class _DivinationScreenState extends State<DivinationScreen> {
   }
 
   Widget _buildNumberInputSection() {
+    final isMobile = Responsive.isMobile(context);
+    
     return CloudBorder(
       color: const Color(0x33D4AF37),
       child: Column(
@@ -407,32 +427,32 @@ class _DivinationScreenState extends State<DivinationScreen> {
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.format_list_numbered,
-                color: Color(0xFFD4AF37),
-                size: 20,
+                color: const Color(0xFFD4AF37),
+                size: isMobile ? 18 : 20,
               ),
-              const SizedBox(width: 8),
-              const Text(
+              SizedBox(width: isMobile ? 6 : 8),
+              Text(
                 '输入数字',
                 style: TextStyle(
-                  color: Color(0xFFD4AF37),
-                  fontSize: 16,
+                  color: const Color(0xFFD4AF37),
+                  fontSize: isMobile ? 14 : 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 2,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          const Text(
+          SizedBox(height: isMobile ? 6 : 8),
+          Text(
             '心中默想两数，以此起卦',
             style: TextStyle(
-              color: Color(0xFF666666),
-              fontSize: 12,
+              color: const Color(0xFF666666),
+              fontSize: isMobile ? 11 : 12,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: isMobile ? 12 : 16),
           Row(
             children: [
               Expanded(
@@ -441,15 +461,15 @@ class _DivinationScreenState extends State<DivinationScreen> {
                   hint: '第一数',
                 ),
               ),
-              const SizedBox(width: 16),
-              const Text(
+              SizedBox(width: isMobile ? 12 : 16),
+              Text(
                 '与',
                 style: TextStyle(
-                  color: Color(0xFFD4AF37),
-                  fontSize: 14,
+                  color: const Color(0xFFD4AF37),
+                  fontSize: isMobile ? 12 : 14,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: isMobile ? 12 : 16),
               Expanded(
                 child: _buildNumberField(
                   controller: _num2Controller,
@@ -467,11 +487,13 @@ class _DivinationScreenState extends State<DivinationScreen> {
     required TextEditingController controller,
     required String hint,
   }) {
+    final isMobile = Responsive.isMobile(context);
+    
     return TextField(
       controller: controller,
-      style: const TextStyle(
-        color: Color(0xFFFFF8DC),
-        fontSize: 16,
+      style: TextStyle(
+        color: const Color(0xFFFFF8DC),
+        fontSize: isMobile ? 14 : 16,
       ),
       keyboardType: TextInputType.number,
       textAlign: TextAlign.center,
@@ -481,37 +503,39 @@ class _DivinationScreenState extends State<DivinationScreen> {
         filled: true,
         fillColor: const Color(0xFF1a1a1a),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
           borderSide: const BorderSide(color: Color(0x33D4AF37)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
           borderSide: const BorderSide(color: Color(0x33D4AF37)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(isMobile ? 6 : 8),
           borderSide: const BorderSide(
             color: Color(0xFFD4AF37),
             width: 2,
           ),
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+        contentPadding: EdgeInsets.symmetric(vertical: isMobile ? 10 : 12),
       ),
     );
   }
 
   Widget _buildStartButton() {
+    final isMobile = Responsive.isMobile(context);
+    
     return Center(
       child: _isLoading
           ? Column(
               children: [
-                const TianJiIndicator(size: 80),
+                TianJiIndicator(size: isMobile ? 60 : 80),
                 const SizedBox(height: 16),
                 Text(
                   '天机运转中...',
                   style: TextStyle(
                     color: const Color(0xFFD4AF37).withValues(alpha: 0.8),
-                    fontSize: 14,
+                    fontSize: isMobile ? 12 : 14,
                     letterSpacing: 2,
                   ),
                 ),

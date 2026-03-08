@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/types.dart';
-
 import '../widgets/tao_decorations.dart';
+import '../utils/responsive.dart';
 
 class ResultScreen extends StatelessWidget {
   final HexagramAnalysis analysis;
@@ -10,6 +10,9 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
+    
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
       appBar: AppBar(
@@ -17,30 +20,35 @@ class ResultScreen extends StatelessWidget {
       ),
       body: MysticBackground(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 24),
-              _buildHexagramDisplay(),
-              const SizedBox(height: 24),
-              _buildAnalysisTable(),
-              const SizedBox(height: 24),
-              _buildInterpretation(),
-              const SizedBox(height: 24),
-              _buildGuaCiSection(),
-              const SizedBox(height: 24),
-              _buildYaoCiSection(),
-              const SizedBox(height: 40),
-            ],
+          padding: Responsive.horizontalPadding(context).copyWith(
+            top: isMobile ? 12 : 16,
+            bottom: isMobile ? 20 : 40,
+          ),
+          child: ConstrainedContainer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildHeader(isMobile: isMobile),
+                SizedBox(height: isMobile ? 16 : 24),
+                _buildHexagramDisplay(isMobile: isMobile, isTablet: isTablet),
+                SizedBox(height: isMobile ? 16 : 24),
+                _buildAnalysisTable(),
+                SizedBox(height: isMobile ? 16 : 24),
+                _buildInterpretation(),
+                SizedBox(height: isMobile ? 16 : 24),
+                _buildGuaCiSection(),
+                SizedBox(height: isMobile ? 16 : 24),
+                _buildYaoCiSection(),
+                SizedBox(height: isMobile ? 20 : 40),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader({required bool isMobile}) {
     return CloudBorder(
       color: const Color(0xFFD4AF37),
       child: Column(
@@ -49,46 +57,46 @@ class ResultScreen extends StatelessWidget {
           Text(
             analysis.question ?? '',
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color(0xFFFFF8DC),
-              fontSize: 18,
+            style: TextStyle(
+              color: const Color(0xFFFFF8DC),
+              fontSize: isMobile ? 16 : 18,
               fontWeight: FontWeight.w600,
-              letterSpacing: 2,
+              letterSpacing: isMobile ? 1 : 2,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: isMobile ? 12 : 16),
           Container(
             width: 60,
             height: 1,
             color: const Color(0x33D4AF37),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: isMobile ? 12 : 16),
           // 起卦方式
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.auto_fix_high,
-                color: Color(0xFFD4AF37),
-                size: 16,
+                color: const Color(0xFFD4AF37),
+                size: isMobile ? 14 : 16,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: isMobile ? 6 : 8),
               Text(
                 analysis.method.displayName,
-                style: const TextStyle(
-                  color: Color(0xFFD4AF37),
-                  fontSize: 14,
+                style: TextStyle(
+                  color: const Color(0xFFD4AF37),
+                  fontSize: isMobile ? 13 : 14,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: isMobile ? 6 : 8),
           // 时间
           Text(
             '${analysis.dayGan.displayName}${analysis.dayZhi.displayName}日 ${analysis.monthZhi.displayName}月',
-            style: const TextStyle(
-              color: Color(0xFF888888),
-              fontSize: 12,
+            style: TextStyle(
+              color: const Color(0xFF888888),
+              fontSize: isMobile ? 11 : 12,
             ),
           ),
         ],
@@ -96,9 +104,9 @@ class ResultScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHexagramDisplay() {
+  Widget _buildHexagramDisplay({required bool isMobile, required bool isTablet}) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(isMobile ? 12 : 20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -108,7 +116,7 @@ class ResultScreen extends StatelessWidget {
             const Color(0xFF1a1a1a),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isMobile ? 12 : 16),
         border: Border.all(
           color: const Color(0x33D4AF37),
         ),
@@ -124,33 +132,35 @@ class ResultScreen extends StatelessWidget {
                 analysis.originalHexagram.unicode,
                 analysis.originalHexagram.binary,
                 true,
+                isMobile: isMobile,
               ),
               if (analysis.changedHexagram != null) ...[
-                const SizedBox(width: 24),
+                SizedBox(width: isMobile ? 12 : (isTablet ? 18 : 24)),
                 Column(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.arrow_forward,
-                      color: Color(0xFFD4AF37),
-                      size: 28,
+                      color: const Color(0xFFD4AF37),
+                      size: isMobile ? 20 : 28,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       '${analysis.changingCount}变',
-                      style: const TextStyle(
-                        color: Color(0xFFC9372C),
-                        fontSize: 12,
+                      style: TextStyle(
+                        color: const Color(0xFFC9372C),
+                        fontSize: isMobile ? 10 : 12,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(width: 24),
+                SizedBox(width: isMobile ? 12 : (isTablet ? 18 : 24)),
                 _buildSingleHexagram(
                   '之卦',
                   analysis.changedHexagram!.fullName,
                   analysis.changedHexagram!.unicode,
                   analysis.changedHexagram!.binary,
                   false,
+                  isMobile: isMobile,
                 ),
               ],
             ],
@@ -165,32 +175,38 @@ class ResultScreen extends StatelessWidget {
     String name,
     String unicode,
     String binary,
-    bool showChanging,
-  ) {
+    bool showChanging, {
+    required bool isMobile,
+  }) {
+    final yaoWidth = isMobile ? 36.0 : 50.0;
+    
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 8 : 12, 
+            vertical: isMobile ? 2 : 4,
+          ),
           decoration: BoxDecoration(
             color: const Color(0x33D4AF37),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(isMobile ? 8 : 12),
           ),
           child: Text(
             label,
-            style: const TextStyle(
-              color: Color(0xFFD4AF37),
-              fontSize: 12,
+            style: TextStyle(
+              color: const Color(0xFFD4AF37),
+              fontSize: isMobile ? 10 : 12,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: isMobile ? 8 : 12),
         Text(
           unicode,
-          style: const TextStyle(
-            fontSize: 56,
-            color: Color(0xFFFFF8DC),
-            shadows: [
+          style: TextStyle(
+            fontSize: isMobile ? 36 : 56,
+            color: const Color(0xFFFFF8DC),
+            shadows: const [
               Shadow(
                 color: Color(0xFFD4AF37),
                 blurRadius: 20,
@@ -199,17 +215,17 @@ class ResultScreen extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: isMobile ? 4 : 8),
         Text(
           name,
-          style: const TextStyle(
-            color: Color(0xFFD4AF37),
+          style: TextStyle(
+            color: const Color(0xFFD4AF37),
             fontWeight: FontWeight.w600,
-            fontSize: 16,
-            letterSpacing: 2,
+            fontSize: isMobile ? 13 : 16,
+            letterSpacing: isMobile ? 1 : 2,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: isMobile ? 10 : 16),
         Column(
           children: List.generate(6, (i) {
             final pos = 5 - i;
@@ -217,33 +233,33 @@ class ResultScreen extends StatelessWidget {
             final yaoInfo = analysis.yaoInfos[pos];
             final isChanging = showChanging && yaoInfo.changing;
             return Container(
-              margin: const EdgeInsets.symmetric(vertical: 3),
+              margin: EdgeInsets.symmetric(vertical: isMobile ? 2 : 3),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (isChanging)
                     Container(
-                      margin: const EdgeInsets.only(right: 8),
+                      margin: const EdgeInsets.only(right: 6),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 2,
+                        horizontal: 3,
+                        vertical: 1,
                       ),
                       decoration: BoxDecoration(
                         color: const Color(0x33C9372C),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
+                      child: Text(
                         '变',
                         style: TextStyle(
-                          color: Color(0xFFC9372C),
-                          fontSize: 10,
+                          color: const Color(0xFFC9372C),
+                          fontSize: isMobile ? 9 : 10,
                         ),
                       ),
                     ),
                   YaoLine(
                     isYang: isYang,
                     isChanging: isChanging,
-                    width: 50,
+                    width: yaoWidth,
                   ),
                 ],
               ),
