@@ -10,7 +10,7 @@ void main() {
     await tester.pumpWidget(const ZhouyiApp());
 
     // Verify that the app title is displayed.
-    expect(find.text('ZHOUYI'), findsOneWidget);
+    expect(find.text('周易'), findsOneWidget);
     expect(find.text('周易占卜系统'), findsOneWidget);
   });
 }

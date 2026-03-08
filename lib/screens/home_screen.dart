@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 40),
                 const Text(
-                  'ZHOUYI',
+                  '周易',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 48,
