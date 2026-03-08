@@ -687,13 +687,33 @@ class ResultScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '（爻辞内容待补充）',
-                    style: TextStyle(
-                      color: Color(0xFF666666),
-                      fontSize: 13,
-                      fontStyle: FontStyle.italic,
-                    ),
+                  // 获取对应位置的爻辞
+                  Builder(
+                    builder: (context) {
+                      final yaoText = analysis.originalHexagram.yaoTexts[index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            yaoText.text,
+                            style: const TextStyle(
+                              color: Color(0xFFFFF8DC),
+                              fontSize: 15,
+                              height: 1.5,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            yaoText.translation,
+                            style: const TextStyle(
+                              color: Color(0xFF888888),
+                              fontSize: 13,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
