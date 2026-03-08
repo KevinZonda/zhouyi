@@ -3,6 +3,7 @@ import '../models/types.dart';
 import '../core/divination.dart';
 import '../core/calendar.dart';
 import '../core/analysis.dart';
+import '../widgets/tao_decorations.dart';
 import 'result_screen.dart';
 
 class DivinationScreen extends StatefulWidget {
@@ -31,99 +32,242 @@ class _DivinationScreenState extends State<DivinationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1a1a2e),
+      backgroundColor: const Color(0xFF0D0D0D),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         title: const Text('起卦'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildQuestionSection(),
-            const SizedBox(height: 24),
-            _buildQuestionTypeSection(),
-            const SizedBox(height: 24),
-            _buildMethodSection(),
-            const SizedBox(height: 24),
-            if (_selectedMethod == DivinationMethod.meihuaNumber)
-              _buildNumberInputSection(),
-            const SizedBox(height: 40),
-            _buildStartButton(),
+      body: MysticBackground(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildHeaderSection(),
+              const SizedBox(height: 24),
+              _buildQuestionSection(),
+              const SizedBox(height: 24),
+              _buildQuestionTypeSection(),
+              const SizedBox(height: 24),
+              _buildMethodSection(),
+              const SizedBox(height: 24),
+              if (_selectedMethod == DivinationMethod.meihuaNumber)
+                _buildNumberInputSection(),
+              const SizedBox(height: 40),
+              _buildStartButton(),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderSection() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFFD4AF37).withValues(alpha: 0.1),
+            const Color(0xFFC9372C).withValues(alpha: 0.05),
           ],
         ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0x33D4AF37),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFD4AF37).withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: const Color(0x33D4AF37),
+              ),
+            ),
+            child: const Icon(
+              Icons.auto_fix_high,
+              color: Color(0xFFD4AF37),
+              size: 28,
+            ),
+          ),
+          const SizedBox(width: 16),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '诚心正意',
+                  style: TextStyle(
+                    color: Color(0xFFD4AF37),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 2,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  '心诚则灵，静心思虑你所问之事',
+                  style: TextStyle(
+                    color: Color(0xFF888888),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildQuestionSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '您的问题',
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+    return CloudBorder(
+      color: const Color(0xFFD4AF37),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.edit_note,
+                color: Color(0xFFD4AF37),
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                '您的问题',
+                style: TextStyle(
+                  color: Color(0xFFD4AF37),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 2,
+                ),
+              ),
+            ],
           ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: _questionController,
-          style: const TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            hintText: '请静心思考您所问之事...',
-            hintStyle: const TextStyle(color: Colors.white38),
-            filled: true,
-            fillColor: Colors.white.withValues(alpha: 0.05),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
+          const SizedBox(height: 12),
+          TextField(
+            controller: _questionController,
+            style: const TextStyle(
+              color: Color(0xFFFFF8DC),
+              fontSize: 15,
             ),
-            contentPadding: const EdgeInsets.all(16),
+            decoration: InputDecoration(
+              hintText: '静心思考，将你所问之事写在心中...',
+              hintStyle: TextStyle(
+                color: const Color(0xFF666666),
+                fontStyle: FontStyle.italic,
+              ),
+              filled: true,
+              fillColor: const Color(0xFF1a1a1a),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: Color(0x33D4AF37)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: Color(0x33D4AF37)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(
+                  color: Color(0xFFD4AF37),
+                  width: 2,
+                ),
+              ),
+              contentPadding: const EdgeInsets.all(16),
+            ),
+            maxLines: 3,
           ),
-          maxLines: 3,
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildQuestionTypeSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '问事类型',
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: QuestionType.values.map((type) {
-            final isSelected = _selectedType == type;
-            return ChoiceChip(
-              label: Text(type.displayName),
-              selected: isSelected,
-              onSelected: (selected) {
-                if (selected) setState(() => _selectedType = type);
-              },
-              selectedColor: const Color(0xFFe94560),
-              backgroundColor: Colors.white.withValues(alpha: 0.1),
-              labelStyle: TextStyle(
-                color: isSelected ? Colors.white : Colors.white70,
+    return CloudBorder(
+      color: const Color(0x33D4AF37),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.category,
+                color: Color(0xFFD4AF37),
+                size: 20,
               ),
-            );
-          }).toList(),
-        ),
-      ],
+              const SizedBox(width: 8),
+              const Text(
+                '问事类型',
+                style: TextStyle(
+                  color: Color(0xFFD4AF37),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 2,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: QuestionType.values.map((type) {
+              final isSelected = _selectedType == type;
+              return GestureDetector(
+                onTap: () {
+                  setState(() => _selectedType = type);
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? const Color(0xFFC9372C)
+                        : const Color(0xFF1a1a1a),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: isSelected
+                          ? const Color(0xFFC9372C)
+                          : const Color(0x33D4AF37),
+                    ),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: const Color(0xFFC9372C).withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Text(
+                    type.displayName,
+                    style: TextStyle(
+                      color: isSelected
+                          ? const Color(0xFFFFF8DC)
+                          : const Color(0xFFAAAAAA),
+                      fontSize: 13,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
     );
   }
 
@@ -131,45 +275,123 @@ class _DivinationScreenState extends State<DivinationScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '起卦方式',
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ...DivinationMethod.values.map((method) {
-          final isSelected = _selectedMethod == method;
-          return Card(
-            margin: const EdgeInsets.only(bottom: 8),
-            color: isSelected 
-                ? const Color(0xFFe94560).withValues(alpha: 0.2) 
-                : Colors.white.withValues(alpha: 0.05),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-              side: BorderSide(
-                color: isSelected ? const Color(0xFFe94560) : Colors.transparent,
-                width: 2,
+        Row(
+          children: [
+            const Icon(
+              Icons.settings,
+              color: Color(0xFFD4AF37),
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              '起卦方式',
+              style: TextStyle(
+                color: Color(0xFFD4AF37),
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 2,
               ),
             ),
-            child: ListTile(
-              title: Text(
-                method.displayName,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
+          ],
+        ),
+        const SizedBox(height: 16),
+        ...DivinationMethod.values.map((method) {
+          final isSelected = _selectedMethod == method;
+          return GestureDetector(
+            onTap: () => setState(() => _selectedMethod = method),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: isSelected
+                      ? [
+                          const Color(0xFFC9372C).withValues(alpha: 0.2),
+                          const Color(0xFFC9372C).withValues(alpha: 0.05),
+                        ]
+                      : [
+                          const Color(0xFF1a1a1a),
+                          const Color(0xFF0D0D0D),
+                        ],
                 ),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isSelected
+                      ? const Color(0xFFC9372C)
+                      : const Color(0x33D4AF37),
+                  width: isSelected ? 2 : 1,
+                ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: const Color(0xFFC9372C).withValues(alpha: 0.2),
+                          blurRadius: 12,
+                          spreadRadius: 1,
+                        ),
+                      ]
+                    : null,
               ),
-              subtitle: Text(
-                method.description,
-                style: const TextStyle(color: Colors.white54, fontSize: 12),
+              child: Row(
+                children: [
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isSelected
+                          ? const Color(0xFFC9372C)
+                          : Colors.transparent,
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFFC9372C)
+                            : const Color(0x33D4AF37),
+                      ),
+                    ),
+                    child: isSelected
+                        ? const Icon(
+                            Icons.check,
+                            size: 16,
+                            color: Color(0xFFFFF8DC),
+                          )
+                        : null,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          method.displayName,
+                          style: TextStyle(
+                            color: const Color(0xFFFFF8DC),
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          method.description,
+                          style: const TextStyle(
+                            color: Color(0xFF888888),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (isSelected)
+                    const Icon(
+                      Icons.auto_fix_high,
+                      color: Color(0xFFD4AF37),
+                      size: 20,
+                    ),
+                ],
               ),
-              trailing: isSelected
-                  ? const Icon(Icons.check_circle, color: Color(0xFFe94560))
-                  : null,
-              onTap: () => setState(() => _selectedMethod = method),
             ),
           );
         }),
@@ -178,77 +400,127 @@ class _DivinationScreenState extends State<DivinationScreen> {
   }
 
   Widget _buildNumberInputSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '输入数字',
-          style: TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+    return CloudBorder(
+      color: const Color(0x33D4AF37),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.format_list_numbered,
+                color: Color(0xFFD4AF37),
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                '输入数字',
+                style: TextStyle(
+                  color: Color(0xFFD4AF37),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 2,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            '心中默想两数，以此起卦',
+            style: TextStyle(
+              color: Color(0xFF666666),
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _buildNumberField(
+                  controller: _num1Controller,
+                  hint: '第一数',
+                ),
+              ),
+              const SizedBox(width: 16),
+              const Text(
+                '与',
+                style: TextStyle(
+                  color: Color(0xFFD4AF37),
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildNumberField(
+                  controller: _num2Controller,
+                  hint: '第二数',
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNumberField({
+    required TextEditingController controller,
+    required String hint,
+  }) {
+    return TextField(
+      controller: controller,
+      style: const TextStyle(
+        color: Color(0xFFFFF8DC),
+        fontSize: 16,
+      ),
+      keyboardType: TextInputType.number,
+      textAlign: TextAlign.center,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Color(0xFF666666)),
+        filled: true,
+        fillColor: const Color(0xFF1a1a1a),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0x33D4AF37)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: Color(0x33D4AF37)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(
+            color: Color(0xFFD4AF37),
+            width: 2,
           ),
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _num1Controller,
-                style: const TextStyle(color: Colors.white),
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: '第一个数字',
-                  hintStyle: const TextStyle(color: Colors.white38),
-                  filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.05),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: TextField(
-                controller: _num2Controller,
-                style: const TextStyle(color: Colors.white),
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintText: '第二个数字',
-                  hintStyle: const TextStyle(color: Colors.white38),
-                  filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.05),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
+        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+      ),
     );
   }
 
   Widget _buildStartButton() {
-    return ElevatedButton(
-      onPressed: _isLoading ? null : _startDivination,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFe94560),
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
+    return Center(
       child: _isLoading
-          ? const CircularProgressIndicator(color: Colors.white)
-          : const Text(
-              '开始起卦',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ? Column(
+              children: [
+                const TianJiIndicator(size: 80),
+                const SizedBox(height: 16),
+                Text(
+                  '天机运转中...',
+                  style: TextStyle(
+                    color: const Color(0xFFD4AF37).withValues(alpha: 0.8),
+                    fontSize: 14,
+                    letterSpacing: 2,
+                  ),
+                ),
+              ],
+            )
+          : RuneButton(
+              text: '开始起卦',
+              icon: Icons.wb_incandescent,
+              onPressed: _startDivination,
             ),
     );
   }
@@ -256,14 +528,20 @@ class _DivinationScreenState extends State<DivinationScreen> {
   void _startDivination() {
     if (_questionController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('请输入您的问题')),
+        const SnackBar(
+          content: Text(
+            '请输入您的问题',
+            style: TextStyle(color: Color(0xFFFFF8DC)),
+          ),
+          backgroundColor: Color(0xFFC9372C),
+        ),
       );
       return;
     }
 
     setState(() => _isLoading = true);
 
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 1500), () {
       late DivinationResult result;
       switch (_selectedMethod) {
         case DivinationMethod.dayan:

@@ -37,6 +37,16 @@ extension WuXingExtension on WuXing {
       case WuXing.water: return '水';
     }
   }
+
+  Color get color {
+    switch (this) {
+      case WuXing.wood: return const Color(0xFF4CAF50);
+      case WuXing.fire: return const Color(0xFFF44336);
+      case WuXing.earth: return const Color(0xFF795548);
+      case WuXing.metal: return const Color(0xFFFFD700);
+      case WuXing.water: return const Color(0xFF2196F3);
+    }
+  }
 }
 
 // 六亲
