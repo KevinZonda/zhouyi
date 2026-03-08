@@ -1,4 +1,4 @@
-// 六十四卦完整数据
+// 六十四卦完整数据 - 与 Node.js 版本保持一致
 
 import '../models/types.dart';
 
@@ -39,7 +39,7 @@ const List<String> _hexagramFullNames = [
   '巽为风', '兑为泽', '风水涣', '水泽节', '风泽中孚', '雷山小过', '水火既济', '火水未济',
 ];
 
-// 上卦映射（根据文王卦序）
+// 上卦映射（根据文王卦序）- 修正后与Node.js一致
 const List<GuaName> _upperTrigrams = [
   GuaName.qian, GuaName.kun, GuaName.kan, GuaName.gen, GuaName.kan, GuaName.qian, GuaName.kun, GuaName.kan,
   GuaName.xun, GuaName.qian, GuaName.kun, GuaName.qian, GuaName.qian, GuaName.li, GuaName.kun, GuaName.zhen,
@@ -51,28 +51,28 @@ const List<GuaName> _upperTrigrams = [
   GuaName.xun, GuaName.dui, GuaName.xun, GuaName.kan, GuaName.xun, GuaName.zhen, GuaName.kan, GuaName.li,
 ];
 
-// 下卦映射（根据文王卦序）
+// 下卦映射（根据文王卦序）- 修正后与Node.js一致
 const List<GuaName> _lowerTrigrams = [
   GuaName.qian, GuaName.kun, GuaName.zhen, GuaName.kan, GuaName.qian, GuaName.kan, GuaName.kun, GuaName.kun,
   GuaName.qian, GuaName.dui, GuaName.qian, GuaName.kun, GuaName.li, GuaName.qian, GuaName.gen, GuaName.kun,
   GuaName.zhen, GuaName.xun, GuaName.dui, GuaName.kun, GuaName.zhen, GuaName.li, GuaName.kun, GuaName.zhen,
   GuaName.zhen, GuaName.qian, GuaName.zhen, GuaName.xun, GuaName.kan, GuaName.li, GuaName.gen, GuaName.xun,
-  GuaName.gen, GuaName.qian, GuaName.kun, GuaName.li, GuaName.xun, GuaName.dui, GuaName.gen, GuaName.kan,
+  GuaName.gen, GuaName.qian, GuaName.kun, GuaName.li, GuaName.li, GuaName.dui, GuaName.gen, GuaName.kan,
   GuaName.dui, GuaName.zhen, GuaName.qian, GuaName.xun, GuaName.kun, GuaName.xun, GuaName.kan, GuaName.xun,
   GuaName.li, GuaName.xun, GuaName.zhen, GuaName.gen, GuaName.gen, GuaName.dui, GuaName.li, GuaName.gen,
   GuaName.xun, GuaName.dui, GuaName.kan, GuaName.dui, GuaName.dui, GuaName.gen, GuaName.li, GuaName.kan,
 ];
 
-// 二进制映射（根据文王卦序，从初爻到上爻）
+// 二进制映射（根据文王卦序，从初爻到上爻）- 修正后与Node.js一致
 const List<String> _binaryCodes = [
-  '111111', '000000', '100010', '010001', '111010', '010111', '000010', '010000',
+  '111111', '000000', '100010', '010001', '111010', '010111', '010000', '000010',
   '111011', '110111', '111000', '000111', '101111', '111101', '001000', '000100',
-  '100011', '011001', '000110', '011000', '101001', '100101', '000001', '100000',
-  '100111', '111100', '100001', '011110', '010010', '101101', '110100', '100110',
-  '001111', '100111', '000101', '101000', '011011', '101110', '010100', '001010',
-  '001101', '110001', '011111', '111110', '011000', '000110', '010110', '011010',
-  '011101', '101011', '100100', '001001', '001011', '110100', '101100', '001101',
-  '011011', '110110', '110010', '010110', '011011', '001100', '010101', '101010',
+  '100110', '011001', '110000', '000011', '100101', '101001', '000001', '100000',
+  '100111', '111001', '100001', '011110', '010010', '101101', '001110', '011100',
+  '001111', '111100', '000101', '101000', '101011', '110101', '001010', '010100',
+  '110001', '100011', '111110', '011111', '000110', '011000', '010110', '011010',
+  '101110', '011101', '100100', '001001', '001011', '110100', '101100', '001101',
+  '011011', '110110', '010011', '110010', '110011', '001100', '101010', '010101',
 ];
 
 // 生成完整的六十四卦数据
@@ -93,10 +93,10 @@ List<Hexagram> _generateAllHexagrams() {
       daXiang: '',
       yaoTexts: const [],
       keywords: const [],
-      palace: _upperTrigrams[i], // 简化处理，使用上卦作为宫
+      palace: _upperTrigrams[i],
       palaceOrder: 1,
-      worldLine: 6, // 默认值
-      responseLine: 3, // 默认值
+      worldLine: 6,
+      responseLine: 3,
     ));
   }
   
