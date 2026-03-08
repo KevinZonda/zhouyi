@@ -690,11 +690,15 @@ class ResultScreen extends StatelessWidget {
 
   Widget _buildGuaCiSection() {
     final hex = analysis.originalHexagram;
+    final changedHex = analysis.changedHexagram;
+    final changingCount = analysis.changingCount;
+    
     return CloudBorder(
       color: const Color(0x33D4AF37),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 本卦
           Row(
             children: [
               const Icon(
@@ -705,7 +709,7 @@ class ResultScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  '${hex.fullName}（第${hex.number}卦）',
+                  '本卦 · ${hex.fullName}（第${hex.number}卦）',
                   style: const TextStyle(
                     color: Color(0xFFD4AF37),
                     fontSize: 16,
@@ -727,13 +731,24 @@ class ResultScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '卦辞',
-                    style: TextStyle(
-                      color: Color(0xFF888888),
-                      fontSize: 12,
-                      letterSpacing: 2,
-                    ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0x33D4AF37),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text(
+                          '卦辞',
+                          style: TextStyle(
+                            color: Color(0xFFD4AF37),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -789,6 +804,136 @@ class ResultScreen extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 16),
+          ],
+          
+          // 6变爻时显示用九/用六
+          if (changingCount == 6 && hex.yongText != null) ...[
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1a1a1a),
+                borderRadius: BorderRadius.circular(8),
+                border: const Border(
+                  left: BorderSide(
+                    color: Color(0xFFC9372C),
+                    width: 3,
+                  ),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0x33C9372C),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          hex.number == 1 ? '用九' : '用六',
+                          style: const TextStyle(
+                            color: Color(0xFFC9372C),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    hex.yongText!,
+                    style: const TextStyle(
+                      color: Color(0xFFFFF8DC),
+                      fontSize: 15,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+          
+          // 之卦卦辞（有变爻时显示）
+          if (changedHex != null && changingCount > 0) ...[
+            const Divider(color: Color(0x33D4AF37)),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Icon(
+                  Icons.arrow_forward,
+                  color: Color(0xFFD4AF37),
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '之卦 · ${changedHex.fullName}（第${changedHex.number}卦）',
+                    style: const TextStyle(
+                      color: Color(0xFFD4AF37),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1a1a1a),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0x33D4AF37),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text(
+                          '卦辞',
+                          style: TextStyle(
+                            color: Color(0xFFD4AF37),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    changedHex.guaCi,
+                    style: const TextStyle(
+                      color: Color(0xFFFFF8DC),
+                      fontSize: 16,
+                      height: 1.6,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    changedHex.guaCiTranslation,
+                    style: const TextStyle(
+                      color: Color(0xFF888888),
+                      fontSize: 13,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ],
       ),
@@ -796,17 +941,53 @@ class ResultScreen extends StatelessWidget {
   }
 
   Widget _buildYaoCiSection() {
-    // 获取变爻的爻辞
-    final changingYaoIndices = <int>[];
-    for (int i = 0; i < 6; i++) {
-      if (analysis.yaoInfos[i].changing) {
-        changingYaoIndices.add(i);
-      }
-    }
-
-    if (changingYaoIndices.isEmpty) {
+    final changingCount = analysis.changingCount;
+    
+    // 根据变爻数量决定显示什么内容
+    if (changingCount == 0) {
+      // 静卦不显示爻辞部分
       return const SizedBox.shrink();
     }
+
+    // 获取应该显示的爻列表
+    final List<({int index, String source, bool isMain})> yaoToShow = [];
+    
+    if (changingCount >= 1 && changingCount <= 2) {
+      // 1-2变爻：看本卦变爻爻辞，上爻为主
+      for (final line in analysis.changingLines) {
+        yaoToShow.add((
+          index: line - 1,
+          source: '本卦',
+          isMain: line == analysis.changingLines.last,
+        ));
+      }
+    } else if (changingCount >= 4 && changingCount <= 5) {
+      // 4-5变爻：看之卦不变爻爻辞，下爻为主
+      final allLines = [1, 2, 3, 4, 5, 6];
+      final unchanging = allLines.where((l) => !analysis.changingLines.contains(l)).toList();
+      for (final line in unchanging) {
+        yaoToShow.add((
+          index: line - 1,
+          source: '之卦',
+          isMain: line == unchanging.first,
+        ));
+      }
+    } else if (changingCount == 6) {
+      // 6变爻：乾坤看用九/用六，其他卦看之卦卦辞
+      // 用九/用六在卦辞部分显示，这里不显示爻辞
+      return const SizedBox.shrink();
+    }
+
+    // 3变爻：本卦卦辞与之卦卦辞参看，不显示具体爻辞
+    if (changingCount == 3) {
+      return const SizedBox.shrink();
+    }
+
+    if (yaoToShow.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final yaoNames = ['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'];
 
     return CloudBorder(
       color: const Color(0x33C9372C),
@@ -821,29 +1002,36 @@ class ResultScreen extends StatelessWidget {
                 size: 20,
               ),
               const SizedBox(width: 8),
-              const Text(
-                '变爻爻辞',
-                style: TextStyle(
-                  color: Color(0xFFC9372C),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 2,
+              Expanded(
+                child: Text(
+                  changingCount <= 2 ? '变爻爻辞（本卦）' : '不变爻爻辞（之卦）',
+                  style: const TextStyle(
+                    color: Color(0xFFC9372C),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 2,
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          ...changingYaoIndices.map((index) {
-            final yaoNames = ['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'];
+          ...yaoToShow.map((yao) {
+            final yaoText = yao.source == '本卦'
+                ? analysis.originalHexagram.yaoTexts[yao.index]
+                : analysis.changedHexagram?.yaoTexts[yao.index];
+            
+            if (yaoText == null) return const SizedBox.shrink();
+
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: const Color(0xFF1a1a1a),
                 borderRadius: BorderRadius.circular(8),
-                border: const Border(
+                border: Border(
                   left: BorderSide(
-                    color: Color(0xFFC9372C),
+                    color: yao.isMain ? const Color(0xFFD4AF37) : const Color(0xFFC9372C),
                     width: 3,
                   ),
                 ),
@@ -851,52 +1039,69 @@ class ResultScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0x33C9372C),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      yaoNames[index],
-                      style: const TextStyle(
-                        color: Color(0xFFC9372C),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: yao.isMain
+                              ? const Color(0x33D4AF37)
+                              : const Color(0x33C9372C),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '${yao.source} · ${yaoNames[yao.index]}',
+                          style: TextStyle(
+                            color: yao.isMain
+                                ? const Color(0xFFD4AF37)
+                                : const Color(0xFFC9372C),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
+                      if (yao.isMain) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0x33D4AF37),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            '为主',
+                            style: TextStyle(
+                              color: Color(0xFFD4AF37),
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   const SizedBox(height: 8),
-                  // 获取对应位置的爻辞
-                  Builder(
-                    builder: (context) {
-                      final yaoText = analysis.originalHexagram.yaoTexts[index];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            yaoText.text,
-                            style: const TextStyle(
-                              color: Color(0xFFFFF8DC),
-                              fontSize: 15,
-                              height: 1.5,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            yaoText.translation,
-                            style: const TextStyle(
-                              color: Color(0xFF888888),
-                              fontSize: 13,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                  Text(
+                    yaoText.text,
+                    style: const TextStyle(
+                      color: Color(0xFFFFF8DC),
+                      fontSize: 15,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    yaoText.translation,
+                    style: const TextStyle(
+                      color: Color(0xFF888888),
+                      fontSize: 13,
+                      height: 1.4,
+                    ),
                   ),
                 ],
               ),

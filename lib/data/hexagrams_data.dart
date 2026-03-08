@@ -418,6 +418,17 @@ const List<int> _palaceOrderList = [
   1, 1, 6, 2, 7, 7, 4, 4,  // 57-64
 ];
 
+// 用九/用六数据（仅乾卦和坤卦有）
+const Map<int, String> _yongTextList = {
+  1: '见群龙无首，吉。',  // 乾卦用九
+  2: '利永贞。',  // 坤卦用六
+};
+
+const Map<int, String> _yongTextTranslationList = {
+  1: '出现一群龙而没有首领，吉祥。',  // 乾卦用九译文
+  2: '利于永远守持正道。',  // 坤卦用六译文
+};
+
 // 生成完整的六十四卦数据
 List<Hexagram> _generateAllHexagrams() {
   final List<Hexagram> hexagrams = [];
@@ -435,6 +446,7 @@ List<Hexagram> _generateAllHexagrams() {
       guaCiTranslation: _guaCiTranslationList[i],
       daXiang: _daXiangList[i],
       yaoTexts: allYaoTexts[i],
+      yongText: _yongTextList[i + 1],
       keywords: _keywordsList[i],
       palace: _upperTrigrams[i],
       palaceOrder: _palaceOrderList[i],
