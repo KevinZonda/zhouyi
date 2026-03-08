@@ -463,6 +463,9 @@ class ResultScreen extends StatelessWidget {
   }
 
   Widget _buildInterpretation() {
+    // 获取应参考的文本指引
+    final relevantTexts = _getRelevantTextGuide();
+    
     return CloudBorder(
       color: const Color(0x33C9372C),
       child: Column(
@@ -495,6 +498,7 @@ class ResultScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
+          // 断卦规则
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -507,18 +511,181 @@ class ResultScreen extends StatelessWidget {
                 ),
               ),
             ),
-            child: Text(
-              analysis.interpretationRule,
-              style: const TextStyle(
-                color: Color(0xFFCCCCCC),
-                height: 1.8,
-                fontSize: 14,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 规则说明
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: const Color(0x33C9372C),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        '断卦规则',
+                        style: TextStyle(
+                          color: Color(0xFFC9372C),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        analysis.interpretationRule,
+                        style: const TextStyle(
+                          color: Color(0xFFFFF8DC),
+                          height: 1.6,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                const Divider(color: Color(0x33C9372C)),
+                const SizedBox(height: 12),
+                // 应参考内容
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: const Color(0x33D4AF37),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        '应参考',
+                        style: TextStyle(
+                          color: Color(0xFFD4AF37),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: relevantTexts.map((text) {
+                          final isMain = text.contains('为主') || text.contains('乾坤看用');
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: isMain 
+                                  ? const Color(0x33D4AF37) 
+                                  : const Color(0xFF1a1a1a),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: isMain 
+                                    ? const Color(0xFFD4AF37) 
+                                    : const Color(0x33D4AF37),
+                              ),
+                            ),
+                            child: Text(
+                              text,
+                              style: TextStyle(
+                                color: isMain 
+                                    ? const Color(0xFFD4AF37) 
+                                    : const Color(0xFFAAAAAA),
+                                fontSize: 13,
+                                fontWeight: isMain ? FontWeight.w600 : FontWeight.normal,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+                // 变爻数显示
+                if (analysis.changingCount > 0) ...[
+                  const SizedBox(height: 12),
+                  const Divider(color: Color(0x33C9372C)),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFC9372C).withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '变爻数: ${analysis.changingCount}',
+                          style: const TextStyle(
+                            color: Color(0xFFC9372C),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        '位置: ${_getChangingLinesText()}',
+                        style: const TextStyle(
+                          color: Color(0xFF888888),
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  /// 获取应参考的文本指引（对应 Node.js 的 getRelevantTextGuide）
+  List<String> _getRelevantTextGuide() {
+    final changingCount = analysis.changingCount;
+    final changingLines = analysis.changingLines;
+    
+    switch (changingCount) {
+      case 0:
+        return ['本卦卦辞'];
+      case 1:
+        return ['本卦第${changingLines[0]}爻爻辞'];
+      case 2:
+        return [
+          '本卦第${changingLines[0]}爻爻辞',
+          '本卦第${changingLines[1]}爻爻辞',
+          '(以上爻为主)',
+        ];
+      case 3:
+        return ['本卦卦辞', '之卦卦辞', '(以本卦为主)'];
+      case 4:
+        final allLines = [1, 2, 3, 4, 5, 6];
+        final unchanging = allLines.where((l) => !changingLines.contains(l)).toList();
+        return [
+          ...unchanging.map((l) => '之卦第$l爻爻辞'),
+          '(以下爻为主)',
+        ];
+      case 5:
+        final allLines = [1, 2, 3, 4, 5, 6];
+        final unchanging = allLines.where((l) => !changingLines.contains(l)).toList();
+        return ['之卦第${unchanging[0]}爻爻辞'];
+      case 6:
+        return ['乾坤看用九/用六', '其他卦看之卦卦辞'];
+      default:
+        return [];
+    }
+  }
+
+  /// 获取变爻位置文字
+  String _getChangingLinesText() {
+    if (analysis.changingLines.isEmpty) return '无';
+    final posNames = ['初', '二', '三', '四', '五', '上'];
+    return analysis.changingLines.map((l) => '${posNames[l - 1]}爻').join('、');
   }
 
   Widget _buildGuaCiSection() {
