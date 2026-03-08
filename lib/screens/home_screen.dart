@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/types.dart';
 import 'divination_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,7 +8,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -22,12 +21,12 @@ class HomeScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 40),
-                Text(
+                const SizedBox(height: 40),
+                const Text(
                   'ZHOUYI',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -37,23 +36,23 @@ class HomeScreen extends StatelessWidget {
                     letterSpacing: 8,
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _trigramSymbol('?', '?'),
-                    _trigramSymbol('?', '?'),
-                    _trigramSymbol('?', '?'),
-                    _trigramSymbol('?', '?'),
-                    _trigramSymbol('?', '?'),
-                    _trigramSymbol('?', '?'),
-                    _trigramSymbol('?', '?'),
-                    _trigramSymbol('?', '?'),
+                    _trigramSymbol('乾', '☰'),
+                    _trigramSymbol('兑', '☱'),
+                    _trigramSymbol('离', '☲'),
+                    _trigramSymbol('震', '☳'),
+                    _trigramSymbol('巽', '☴'),
+                    _trigramSymbol('坎', '☵'),
+                    _trigramSymbol('艮', '☶'),
+                    _trigramSymbol('坤', '☷'),
                   ],
                 ),
-                SizedBox(height: 32),
-                Text(
-                  '??????',
+                const SizedBox(height: 32),
+                const Text(
+                  '周易占卜系统',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -61,8 +60,8 @@ class HomeScreen extends StatelessWidget {
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                SizedBox(height: 8),
-                Text(
+                const SizedBox(height: 8),
+                const Text(
                   'Yi Jing Divination System',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -70,18 +69,18 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.white38,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
+                    color: Colors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                   ),
-                  child: Column(
+                  child: const Column(
                     children: [
                       Text(
-                        '??????????????',
+                        '不诚不占，不义不占，不疑不占',
                         style: TextStyle(
                           color: Colors.white60,
                           fontSize: 14,
@@ -89,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '??????',
+                        '《易学启蒙》',
                         style: TextStyle(
                           color: Colors.white38,
                           fontSize: 12,
@@ -98,38 +97,38 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DivinationScreen()),
+                      MaterialPageRoute(builder: (context) => const DivinationScreen()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFe94560),
+                    backgroundColor: const Color(0xFFe94560),
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 18),
+                    padding: const EdgeInsets.symmetric(vertical: 18),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text(
-                    '????',
+                  child: const Text(
+                    '开始占卜',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     _showAboutDialog(context);
                   },
-                  child: Text(
-                    '????',
+                  child: const Text(
+                    '关于周易',
                     style: TextStyle(color: Colors.white54),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -140,12 +139,12 @@ class HomeScreen extends StatelessWidget {
 
   Widget _trigramSymbol(String name, String symbol) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Column(
         children: [
-          Text(symbol, style: TextStyle(fontSize: 20, color: Colors.white54)),
-          SizedBox(height: 2),
-          Text(name, style: TextStyle(fontSize: 10, color: Colors.white38)),
+          Text(symbol, style: const TextStyle(fontSize: 20, color: Colors.white54)),
+          const SizedBox(height: 2),
+          Text(name, style: const TextStyle(fontSize: 10, color: Colors.white38)),
         ],
       ),
     );
@@ -155,17 +154,17 @@ class HomeScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Color(0xFF1a1a2e),
-        title: Text('????', style: TextStyle(color: Colors.white)),
-        content: Text(
-          '????????????????????????'
-          '??????????????????????????????????',
+        backgroundColor: const Color(0xFF1a1a2e),
+        title: const Text('关于周易', style: TextStyle(color: Colors.white)),
+        content: const Text(
+          '周易是中国古代最重要的经典之一，被誉为群经之首。'
+          '本应用基于传统易学规则，提供大衍筮法、铜钱法、梅花易数三种起卦方式。',
           style: TextStyle(color: Colors.white70),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('??', style: TextStyle(color: Color(0xFFe94560))),
+            child: const Text('关闭', style: TextStyle(color: Color(0xFFe94560))),
           ),
         ],
       ),

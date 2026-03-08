@@ -1,8 +1,9 @@
-// ??????
+// 周易起卦算法
+
 import '../models/types.dart';
 import 'dart:math';
 
-/// ?????
+/// 铜钱法起卦
 DivinationResult coinMethod() {
   final random = Random();
   final yaoValues = <YaoValue>[];
@@ -22,7 +23,7 @@ DivinationResult coinMethod() {
   );
 }
 
-/// ??????
+/// 大衍筮法起卦
 DivinationResult dayanMethod() {
   final yaoValues = <YaoValue>[];
   for (int i = 0; i < 6; i++) {
@@ -57,7 +58,7 @@ int _dayanOneChange(int total, Random random) {
   return total - guiqi;
 }
 
-/// ???? - ????
+/// 梅花易数 - 数字起卦
 DivinationResult meihuaNumberMethod(int num1, int num2) {
   final upperIdx = num1 % 8 == 0 ? 8 : num1 % 8;
   final lowerIdx = num2 % 8 == 0 ? 8 : num2 % 8;

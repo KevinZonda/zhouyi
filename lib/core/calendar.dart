@@ -1,4 +1,5 @@
-// ?????
+// 干支历计算
+
 import '../models/types.dart';
 
 const List<TianGan> tianGanList = [
@@ -11,7 +12,7 @@ const List<DiZhi> diZhiList = [
   DiZhi.wu, DiZhi.wei, DiZhi.shen, DiZhi.you, DiZhi.xu, DiZhi.hai
 ];
 
-/// ???????
+/// 计算儒略日编号
 int julianDayNumber(int year, int month, int day) {
   int a = (14 - month) ~/ 12;
   int y = year + 4800 - a;
@@ -19,7 +20,7 @@ int julianDayNumber(int year, int month, int day) {
   return day + (153 * m + 2) ~/ 5 + 365 * y + y ~/ 4 - y ~/ 100 + y ~/ 400 - 32045;
 }
 
-/// ?????
+/// 计算日干支
 ({TianGan gan, DiZhi zhi}) getDayGanZhi(DateTime date) {
   int jdn = julianDayNumber(date.year, date.month, date.day);
   int baseJdn = 2415021; // 1900-01-01
@@ -29,7 +30,7 @@ int julianDayNumber(int year, int month, int day) {
   return (gan: tianGanList[ganIndex], zhi: diZhiList[zhiIndex]);
 }
 
-/// ????????
+/// 计算月建（地支）
 DiZhi getMonthZhi(DateTime date) {
   int m = date.month;
   int d = date.day;
@@ -50,19 +51,19 @@ DiZhi getMonthZhi(DateTime date) {
   return DiZhi.zi;
 }
 
-/// ??????
+/// 计算当前时辰
 ({DiZhi zhi, String name}) getShiChen(DateTime date) {
   int hour = date.hour;
   int index = ((hour + 1) % 24) ~/ 2;
   final names = [
-    '??(23-01)', '??(01-03)', '??(03-05)', '??(05-07)',
-    '??(07-09)', '??(09-11)', '??(11-13)', '??(13-15)',
-    '??(15-17)', '??(17-19)', '??(19-21)', '??(21-23)',
+    '子时(23-01)', '丑时(01-03)', '寅时(03-05)', '卯时(05-07)',
+    '辰时(07-09)', '巳时(09-11)', '午时(11-13)', '未时(13-15)',
+    '申时(15-17)', '酉时(17-19)', '戌时(19-21)', '亥时(21-23)',
   ];
   return (zhi: diZhiList[index], name: names[index]);
 }
 
-/// ???????????
+/// 获取完整的占卜时间信息
 DivinationTime getDivinationTime([DateTime? date]) {
   final d = date ?? DateTime.now();
   final dayGanZhi = getDayGanZhi(d);

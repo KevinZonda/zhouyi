@@ -71,12 +71,12 @@ extension LiuShenExtension on LiuShen {
 
   Color get color {
     switch (this) {
-      case LiuShen.qinglong: return const Color(0xFF4CAF50); // 绿色
-      case LiuShen.zhuque: return const Color(0xFFF44336);   // 红色
-      case LiuShen.gouchen: return const Color(0xFF795548);  // 棕色
-      case LiuShen.tengshe: return const Color(0xFF9C27B0);  // 紫色
-      case LiuShen.baihu: return const Color(0xFF607D8B);    // 蓝灰
-      case LiuShen.xuanwu: return const Color(0xFF2196F3);   // 蓝色
+      case LiuShen.qinglong: return const Color(0xFF4CAF50);
+      case LiuShen.zhuque: return const Color(0xFFF44336);
+      case LiuShen.gouchen: return const Color(0xFF795548);
+      case LiuShen.tengshe: return const Color(0xFF9C27B0);
+      case LiuShen.baihu: return const Color(0xFF607D8B);
+      case LiuShen.xuanwu: return const Color(0xFF2196F3);
     }
   }
 }
@@ -473,4 +473,3 @@ class DivinationTime {
     required this.display,
   });
 }
-

@@ -1,19 +1,20 @@
-// ???????????
+// 周易装卦与断卦分析引擎
+
 import '../models/types.dart';
 import '../data/trigrams_data.dart';
 import '../data/hexagrams_data.dart';
 
-/// ?????
+/// 爻值转阴阳
 YinYang yaoToYinYang(YaoValue value) {
   return value.isYang ? YinYang.yang : YinYang.yin;
 }
 
-/// ??????
+/// 判断是否变爻
 bool isChanging(YaoValue value) {
   return value.isChanging;
 }
 
-/// ?6?????????
+/// 从6个爻的阴阳值识别卦
 ({GuaName upper, GuaName lower, String binary}) identifyHexagram(List<YinYang> yinyangs) {
   final binary = yinyangs.map((y) => y == YinYang.yang ? '1' : '0').join();
   final lowerBin = binary.substring(0, 3);
@@ -25,7 +26,7 @@ bool isChanging(YaoValue value) {
   );
 }
 
-/// ????????????
+/// 计算变卦（之卦）的阴阳值
 List<YinYang> getChangedYinYangs(List<YaoValue> yaoValues) {
   return yaoValues.map((v) {
     if (v == YaoValue.oldYang) return YinYang.yin;
@@ -35,7 +36,7 @@ List<YinYang> getChangedYinYangs(List<YaoValue> yaoValues) {
   }).toList();
 }
 
-/// ????????
+/// 计算互卦的阴阳值
 List<YinYang> getMutualYinYangs(List<YinYang> yinyangs) {
   return [
     yinyangs[1], yinyangs[2], yinyangs[3],
@@ -57,7 +58,7 @@ String getInterpretationRule(int changingCount) {
   return rules[changingCount] ?? '';
 }
 
-/// ??????????
+/// 主分析函数：完整装卦
 HexagramAnalysis analyzeHexagram({
   required DivinationResult result,
   required TianGan dayGan,
@@ -71,45 +72,45 @@ HexagramAnalysis analyzeHexagram({
 }) {
   final yaoValues = result.yaoValues;
   
-  // 1. ????
+  // 1. 本卦阴阳
   final originalYinYangs = yaoValues.map(yaoToYinYang).toList();
   final hexInfo = identifyHexagram(originalYinYangs);
   final originalBinary = hexInfo.binary;
   final upper = hexInfo.upper;
   final lower = hexInfo.lower;
   
-  // 2. ????
+  // 2. 识别变爻
   final changingLines = <int>[];
   for (int i = 0; i < 6; i++) {
     if (isChanging(yaoValues[i])) changingLines.add(i + 1);
   }
   final changingCount = changingLines.length;
   
-  // 3. ????
+  // 3. 计算之卦
   String? changedBinary;
   if (changingCount > 0) {
     final changedYinYangs = getChangedYinYangs(yaoValues);
     changedBinary = changedYinYangs.map((y) => y == YinYang.yang ? '1' : '0').join();
   }
   
-  // 4. ????
+  // 4. 计算互卦
   final mutualYinYangs = getMutualYinYangs(originalYinYangs);
   final mutualBinary = mutualYinYangs.map((y) => y == YinYang.yang ? '1' : '0').join();
   
-  // 5. ????
+  // 5. 纳甲装卦
   final lowerNajia = najiaTable[lower]!;
   final upperNajia = najiaTable[upper]!;
   
-  // 6. ??????
+  // 6. 宫的五行属性
   final palaceElement = (palace ?? upper).element;
   
-  // 7. ????
+  // 7. 六神配置
   final liuShenArray = getLiuShenArray(dayGan);
   
-  // 8. ????
+  // 8. 空亡地支
   final emptyBranches = getEmptyBranches(dayGan, dayZhi);
   
-  // 9. ?????
+  // 9. 组装爻信息
   final yaoInfos = <YaoInfo>[];
   for (int i = 0; i < 6; i++) {
     final position = i + 1;
@@ -146,10 +147,10 @@ HexagramAnalysis analyzeHexagram({
     ));
   }
   
-  // 10. ????
+  // 10. 解读规则
   final interpretationRule = getInterpretationRule(changingCount);
   
-  // ??????
+  // 获取卦象数据
   final originalHex = binaryToHexagram[originalBinary] ?? _createPlaceholderHexagram(originalBinary, upper, lower);
   final changedHex = changedBinary != null ? (binaryToHexagram[changedBinary] ?? _createPlaceholderHexagram(changedBinary, upper, lower)) : null;
   final mutualHex = binaryToHexagram[mutualBinary] ?? _createPlaceholderHexagram(mutualBinary, upper, lower);

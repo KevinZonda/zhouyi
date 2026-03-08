@@ -31,26 +31,26 @@ class _DivinationScreenState extends State<DivinationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1a1a2e),
+      backgroundColor: const Color(0xFF1a1a2e),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('??'),
+        title: const Text('起卦'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildQuestionSection(),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             _buildQuestionTypeSection(),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             _buildMethodSection(),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             if (_selectedMethod == DivinationMethod.meihuaNumber)
               _buildNumberInputSection(),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             _buildStartButton(),
           ],
         ),
@@ -62,28 +62,28 @@ class _DivinationScreenState extends State<DivinationScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '????',
+        const Text(
+          '您的问题',
           style: TextStyle(
             color: Colors.white70,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         TextField(
           controller: _questionController,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            hintText: '??????????...',
-            hintStyle: TextStyle(color: Colors.white38),
+            hintText: '请静心思考您所问之事...',
+            hintStyle: const TextStyle(color: Colors.white38),
             filled: true,
-            fillColor: Colors.white.withOpacity(0.05),
+            fillColor: Colors.white.withValues(alpha: 0.05),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
             ),
-            contentPadding: EdgeInsets.all(16),
+            contentPadding: const EdgeInsets.all(16),
           ),
           maxLines: 3,
         ),
@@ -95,15 +95,15 @@ class _DivinationScreenState extends State<DivinationScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '????',
+        const Text(
+          '问事类型',
           style: TextStyle(
             color: Colors.white70,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Wrap(
           spacing: 8,
           runSpacing: 8,
@@ -115,8 +115,8 @@ class _DivinationScreenState extends State<DivinationScreen> {
               onSelected: (selected) {
                 if (selected) setState(() => _selectedType = type);
               },
-              selectedColor: Color(0xFFe94560),
-              backgroundColor: Colors.white.withOpacity(0.1),
+              selectedColor: const Color(0xFFe94560),
+              backgroundColor: Colors.white.withValues(alpha: 0.1),
               labelStyle: TextStyle(
                 color: isSelected ? Colors.white : Colors.white70,
               ),
@@ -131,46 +131,48 @@ class _DivinationScreenState extends State<DivinationScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '????',
+        const Text(
+          '起卦方式',
           style: TextStyle(
             color: Colors.white70,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         ...DivinationMethod.values.map((method) {
           final isSelected = _selectedMethod == method;
           return Card(
-            margin: EdgeInsets.only(bottom: 8),
-            color: isSelected ? Color(0xFFe94560).withOpacity(0.2) : Colors.white.withOpacity(0.05),
+            margin: const EdgeInsets.only(bottom: 8),
+            color: isSelected 
+                ? const Color(0xFFe94560).withValues(alpha: 0.2) 
+                : Colors.white.withValues(alpha: 0.05),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(
-                color: isSelected ? Color(0xFFe94560) : Colors.transparent,
+                color: isSelected ? const Color(0xFFe94560) : Colors.transparent,
                 width: 2,
               ),
             ),
             child: ListTile(
               title: Text(
                 method.displayName,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               subtitle: Text(
                 method.description,
-                style: TextStyle(color: Colors.white54, fontSize: 12),
+                style: const TextStyle(color: Colors.white54, fontSize: 12),
               ),
               trailing: isSelected
-                  ? Icon(Icons.check_circle, color: Color(0xFFe94560))
+                  ? const Icon(Icons.check_circle, color: Color(0xFFe94560))
                   : null,
               onTap: () => setState(() => _selectedMethod = method),
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -179,27 +181,27 @@ class _DivinationScreenState extends State<DivinationScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '????',
+        const Text(
+          '输入数字',
           style: TextStyle(
             color: Colors.white70,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Row(
           children: [
             Expanded(
               child: TextField(
                 controller: _num1Controller,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: '?????',
-                  hintStyle: TextStyle(color: Colors.white38),
+                  hintText: '第一个数字',
+                  hintStyle: const TextStyle(color: Colors.white38),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.05),
+                  fillColor: Colors.white.withValues(alpha: 0.05),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -207,17 +209,17 @@ class _DivinationScreenState extends State<DivinationScreen> {
                 ),
               ),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Expanded(
               child: TextField(
                 controller: _num2Controller,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: '?????',
-                  hintStyle: TextStyle(color: Colors.white38),
+                  hintText: '第二个数字',
+                  hintStyle: const TextStyle(color: Colors.white38),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.05),
+                  fillColor: Colors.white.withValues(alpha: 0.05),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
@@ -235,17 +237,17 @@ class _DivinationScreenState extends State<DivinationScreen> {
     return ElevatedButton(
       onPressed: _isLoading ? null : _startDivination,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFe94560),
+        backgroundColor: const Color(0xFFe94560),
         foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 18),
+        padding: const EdgeInsets.symmetric(vertical: 18),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
       ),
       child: _isLoading
-          ? CircularProgressIndicator(color: Colors.white)
-          : Text(
-              '????',
+          ? const CircularProgressIndicator(color: Colors.white)
+          : const Text(
+              '开始起卦',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
     );
@@ -254,15 +256,15 @@ class _DivinationScreenState extends State<DivinationScreen> {
   void _startDivination() {
     if (_questionController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('???????')),
+        const SnackBar(content: Text('请输入您的问题')),
       );
       return;
     }
 
     setState(() => _isLoading = true);
 
-    Future.delayed(Duration(milliseconds: 800), () {
-      DivinationResult result;
+    Future.delayed(const Duration(milliseconds: 800), () {
+      late DivinationResult result;
       switch (_selectedMethod) {
         case DivinationMethod.dayan:
           result = dayanMethod();
